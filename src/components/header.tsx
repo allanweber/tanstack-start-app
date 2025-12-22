@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router'
 import { Menu, X } from 'lucide-react'
 import React from 'react'
 import Logo from './logo'
+import { SearchAsync } from './search-async'
 
 const menuItems = [
     { name: 'Home', href: '#home' },
@@ -76,6 +77,9 @@ export default function Header() {
                                 </ul>
                             </div>
                             <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+                                <div className="w-full sm:w-auto">
+                                    <SearchAsync />
+                                </div>
                                 <Button
                                     asChild
                                     variant="outline"
