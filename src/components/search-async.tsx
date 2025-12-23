@@ -1,15 +1,12 @@
 import {
-    AlertCircleIcon,
     BookOpenIcon,
     FileTextIcon,
     HomeIcon,
     Loader2Icon,
     PackageIcon,
-    SearchIcon,
     SearchXIcon,
     SettingsIcon,
     ShoppingCartIcon,
-    SparklesIcon,
     UserIcon
 } from 'lucide-react'
 import * as React from 'react'
@@ -26,7 +23,7 @@ import { Search, SearchResult } from './search'
 // Simulated API call - replace with your actual API endpoint
 async function searchAPI(query: string): Promise<SearchResult[]> {
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500))
+    // await new Promise(resolve => setTimeout(resolve, 500))
 
     // This is mock data. In production, replace with:
     // const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
@@ -146,7 +143,6 @@ export function SearchAsync() {
     const [query, setQuery] = React.useState('')
     const [results, setResults] = React.useState<SearchResult[]>([])
     const [isLoading, setIsLoading] = React.useState(false)
-    const [error, setError] = React.useState<string | null>(null)
     const [hasSearched, setHasSearched] = React.useState(false)
 
     // Debounce the search query to avoid too many API calls
@@ -172,7 +168,6 @@ export function SearchAsync() {
 
         const fetchResults = async () => {
             setIsLoading(true)
-            setError(null)
             setHasSearched(true)
 
             try {
@@ -180,7 +175,6 @@ export function SearchAsync() {
                 setResults(data)
             } catch (err) {
                 console.error('Search error:', err)
-                setError('Failed to fetch search results. Please try again.')
                 setResults([])
             } finally {
                 setIsLoading(false)
@@ -202,65 +196,41 @@ export function SearchAsync() {
         }
     }
 
-    // Show appropriate empty text and icon based on state
-    const { emptyText, emptyIcon } = React.useMemo(() => {
-        // User hasn't typed anything yet
-        if (query.length === 0) {
-            return {
-                emptyText: 'Start typing to search...',
-                emptyIcon: <SparklesIcon className="h-12 w-12" />
-            }
-        }
 
-        // User typed 1-2 characters
-        if (query.length > 0 && query.length < 3) {
-            return {
-                emptyText: 'Type at least 3 characters to search...',
-                emptyIcon: <SearchIcon className="h-12 w-12" />
-            }
-        }
-
-        // Currently searching
+    // Determine what to show in the empty state
+    const emptyContent = React.useMemo(() => {
+        // Loading state
         if (isLoading) {
-            return {
-                emptyText: 'Searching...',
-                emptyIcon: <Loader2Icon className="h-12 w-12 animate-spin" />
-            }
+            return (
+                <div className="flex flex-col items-center justify-center gap-3 py-8">
+                    <Loader2Icon className="h-12 w-12 animate-spin text-muted-foreground/50" />
+                    <p className="text-sm text-muted-foreground">Searching...</p>
+                </div>
+            )
         }
 
-        // Error occurred
-        if (error) {
-            return {
-                emptyText: error,
-                emptyIcon: <AlertCircleIcon className="h-12 w-12" />
-            }
-        }
-
-        // Search was executed but no results found
+        // No results state (only show after search was executed)
         if (hasSearched && results.length === 0) {
-            return {
-                emptyText: 'No results found. Try a different search term.',
-                emptyIcon: <SearchXIcon className="h-12 w-12" />
-            }
+            return (
+                <div className="flex flex-col items-center justify-center gap-3 py-8">
+                    <SearchXIcon className="h-12 w-12 text-muted-foreground/50" />
+                    <p className="text-sm text-muted-foreground">No results found. Try a different search term.</p>
+                </div>
+            )
         }
 
-        // Default fallback
-        return {
-            emptyText: 'Start typing to search...',
-            emptyIcon: <SparklesIcon className="h-12 w-12" />
-        }
-    }, [query.length, isLoading, error, hasSearched, results.length])
+        return null
+    }, [isLoading, hasSearched, results.length])
 
     return (
         <Search
             results={results}
             placeholder="Search documentation, pages, and more..."
-            buttonText="Search"
             onSearch={handleSearch}
             onSelect={handleSelect}
-            emptyText={emptyText}
-            emptyIcon={emptyIcon}
             groupByCategory={true}
+            className="rounded-lg border shadow-md"
+            emptyContent={emptyContent}
         />
     )
 }
