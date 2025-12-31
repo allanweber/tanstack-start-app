@@ -1,13 +1,7 @@
+import { useNavigate } from '@tanstack/react-router'
 import {
-    BookOpenIcon,
-    FileTextIcon,
-    HomeIcon,
     Loader2Icon,
-    PackageIcon,
-    SearchXIcon,
-    SettingsIcon,
-    ShoppingCartIcon,
-    UserIcon
+    SearchXIcon
 } from 'lucide-react'
 import * as React from 'react'
 import { Search, SearchResult } from './search'
@@ -26,83 +20,108 @@ async function searchAPI(query: string): Promise<SearchResult[]> {
     const allResults: SearchResult[] = [
         {
             id: '1',
-            title: 'Getting Started Guide',
-            description: 'Learn how to set up and configure your application with our comprehensive guide',
-            category: 'Documentation',
-            url: '/docs/getting-started',
-            icon: <BookOpenIcon className="h-4 w-4" />,
+            title: 'Margherita Pizza',
+            description: 'Classic Italian pizza with fresh mozzarella, tomatoes, and basil',
+            slug: 'margherita-pizza',
+            image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=100&h=100&fit=crop',
         },
         {
             id: '2',
-            title: 'Home Page',
-            description: 'Navigate to the home page and explore our features',
-            category: 'Pages',
-            url: '/',
-            icon: <HomeIcon className="h-4 w-4" />,
+            title: 'Cheeseburger',
+            description: 'Juicy beef patty with melted cheese, lettuce, tomato, and special sauce',
+            slug: 'cheeseburger',
+            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&h=100&fit=crop',
         },
         {
             id: '3',
-            title: 'User Settings',
-            description: 'Manage your account settings and preferences',
-            category: 'Settings',
-            url: '/settings',
-            icon: <SettingsIcon className="h-4 w-4" />,
+            title: 'Caesar Salad',
+            description: 'Fresh romaine lettuce with parmesan, croutons, and Caesar dressing',
+            slug: 'caesar-salad',
+            image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=100&h=100&fit=crop',
         },
         {
             id: '4',
-            title: 'User Profile',
-            description: 'View and edit your profile information',
-            category: 'User',
-            url: '/profile',
-            icon: <UserIcon className="h-4 w-4" />,
+            title: 'Sushi Platter',
+            description: 'Assorted fresh sushi rolls with salmon, tuna, and avocado',
+            slug: 'sushi-platter',
+            image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=100&h=100&fit=crop',
         },
         {
             id: '5',
-            title: 'Products Catalog',
-            description: 'Browse our complete product catalog',
-            category: 'Shopping',
-            url: '/products',
-            icon: <PackageIcon className="h-4 w-4" />,
+            title: 'Tacos',
+            description: 'Soft corn tortillas filled with seasoned meat, salsa, and cilantro',
+            slug: 'tacos',
+            image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=100&h=100&fit=crop',
         },
         {
             id: '6',
-            title: 'Shopping Cart',
-            description: 'View items in your shopping cart and proceed to checkout',
-            category: 'Shopping',
-            url: '/cart',
-            icon: <ShoppingCartIcon className="h-4 w-4" />,
+            title: 'Pad Thai',
+            description: 'Stir-fried rice noodles with shrimp, peanuts, and tangy sauce',
+            slug: 'pad-thai',
+            image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=100&h=100&fit=crop',
         },
         {
             id: '7',
-            title: 'API Documentation',
-            description: 'Learn about available API endpoints and usage examples',
-            category: 'Documentation',
-            url: '/docs/api',
-            icon: <FileTextIcon className="h-4 w-4" />,
+            title: 'Pasta Carbonara',
+            description: 'Creamy Italian pasta with bacon, eggs, and parmesan cheese',
+            slug: 'pasta-carbonara',
+            image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=100&h=100&fit=crop',
         },
         {
             id: '8',
-            title: 'Component Library',
-            description: 'Explore available UI components and their implementations',
-            category: 'Documentation',
-            url: '/docs/components',
-            icon: <PackageIcon className="h-4 w-4" />,
+            title: 'Chicken Tikka Masala',
+            description: 'Tender chicken in a rich, creamy tomato-based curry sauce',
+            slug: 'chicken-tikka-masala',
+            image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=100&h=100&fit=crop',
         },
         {
             id: '9',
-            title: 'Authentication',
-            description: 'Learn about authentication and authorization',
-            category: 'Documentation',
-            url: '/docs/auth',
-            icon: <UserIcon className="h-4 w-4" />,
+            title: 'Ramen Bowl',
+            description: 'Japanese noodle soup with pork, soft-boiled egg, and vegetables',
+            slug: 'ramen-bowl',
+            image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=100&h=100&fit=crop',
         },
         {
             id: '10',
-            title: 'Deployment Guide',
-            description: 'Deploy your application to production',
-            category: 'Documentation',
-            url: '/docs/deployment',
-            icon: <BookOpenIcon className="h-4 w-4" />,
+            title: 'Greek Gyros',
+            description: 'Grilled meat wrapped in pita with tzatziki, tomatoes, and onions',
+            slug: 'greek-gyros',
+            image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=100&h=100&fit=crop',
+        },
+        {
+            id: '11',
+            title: 'BBQ Ribs',
+            description: 'Slow-cooked pork ribs with smoky barbecue sauce',
+            slug: 'bbq-ribs',
+            image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=100&h=100&fit=crop',
+        },
+        {
+            id: '12',
+            title: 'Fried Rice',
+            description: 'Wok-fried rice with vegetables, eggs, and soy sauce',
+            slug: 'fried-rice',
+            image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=100&h=100&fit=crop',
+        },
+        {
+            id: '13',
+            title: 'Fish and Chips',
+            description: 'Crispy battered fish with golden french fries',
+            slug: 'fish-and-chips',
+            image: 'https://images.unsplash.com/photo-1579208570378-8c970854bc23?w=100&h=100&fit=crop',
+        },
+        {
+            id: '14',
+            title: 'Falafel Wrap',
+            description: 'Crispy chickpea fritters with hummus, vegetables, and tahini',
+            slug: 'falafel-wrap',
+            image: 'https://images.unsplash.com/photo-1593858421991-5c5c4f55aa3a?w=100&h=100&fit=crop',
+        },
+        {
+            id: '15',
+            title: 'Chocolate Cake',
+            description: 'Rich, moist chocolate cake with creamy chocolate frosting',
+            slug: 'chocolate-cake',
+            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=100&h=100&fit=crop',
         },
     ]
 
@@ -111,8 +130,7 @@ async function searchAPI(query: string): Promise<SearchResult[]> {
     return allResults.filter(
         result =>
             result.title.toLowerCase().includes(lowerQuery) ||
-            result.description?.toLowerCase().includes(lowerQuery) ||
-            result.category?.toLowerCase().includes(lowerQuery)
+            result.description?.toLowerCase().includes(lowerQuery)
     )
 }
 
@@ -134,6 +152,7 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 export function SearchAsync() {
+    const navigate = useNavigate()
     const [query, setQuery] = React.useState('')
     const [results, setResults] = React.useState<SearchResult[]>([])
     const [isLoading, setIsLoading] = React.useState(false)
@@ -184,9 +203,14 @@ export function SearchAsync() {
 
     const handleSelect = (result: SearchResult) => {
         console.log('Selected:', result)
-        // Navigate to the result URL
-        if (result.url) {
-            window.location.href = result.url
+        // Clear search state
+        setQuery('')
+        setResults([])
+        setIsLoading(false)
+        setHasSearched(false)
+        // Navigate to the food detail page
+        if (result.slug) {
+            navigate({ to: '/foods/$food', params: { food: result.slug } })
         }
     }
 
@@ -223,7 +247,6 @@ export function SearchAsync() {
             badgeText="Search Foods"
             onSearch={handleSearch}
             onSelect={handleSelect}
-            groupByCategory={true}
             emptyContent={emptyContent}
         />
     )

@@ -10,11 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FoodsSlugRouteImport } from './routes/foods/$slug'
+import { Route as FoodsFoodRouteImport } from './routes/foods/$food'
 import { Route as DemoQueryRouteImport } from './routes/demo/query'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodsSlugRoute = FoodsSlugRouteImport.update({
+  id: '/foods/$slug',
+  path: '/foods/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FoodsFoodRoute = FoodsFoodRouteImport.update({
+  id: '/foods/$food',
+  path: '/foods/$food',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoQueryRoute = DemoQueryRouteImport.update({
@@ -26,27 +38,35 @@ const DemoQueryRoute = DemoQueryRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo/query': typeof DemoQueryRoute
+  '/foods/$food': typeof FoodsFoodRoute
+  '/foods/$slug': typeof FoodsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo/query': typeof DemoQueryRoute
+  '/foods/$food': typeof FoodsFoodRoute
+  '/foods/$slug': typeof FoodsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demo/query': typeof DemoQueryRoute
+  '/foods/$food': typeof FoodsFoodRoute
+  '/foods/$slug': typeof FoodsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/query'
+  fullPaths: '/' | '/demo/query' | '/foods/$food' | '/foods/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/query'
-  id: '__root__' | '/' | '/demo/query'
+  to: '/' | '/demo/query' | '/foods/$food' | '/foods/$slug'
+  id: '__root__' | '/' | '/demo/query' | '/foods/$food' | '/foods/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DemoQueryRoute: typeof DemoQueryRoute
+  FoodsFoodRoute: typeof FoodsFoodRoute
+  FoodsSlugRoute: typeof FoodsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -56,6 +76,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/foods/$slug': {
+      id: '/foods/$slug'
+      path: '/foods/$slug'
+      fullPath: '/foods/$slug'
+      preLoaderRoute: typeof FoodsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/foods/$food': {
+      id: '/foods/$food'
+      path: '/foods/$food'
+      fullPath: '/foods/$food'
+      preLoaderRoute: typeof FoodsFoodRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/query': {
@@ -71,6 +105,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DemoQueryRoute: DemoQueryRoute,
+  FoodsFoodRoute: FoodsFoodRoute,
+  FoodsSlugRoute: FoodsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
