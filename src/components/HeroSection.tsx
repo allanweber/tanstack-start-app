@@ -1,15 +1,11 @@
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { SearchAsync } from './search-async'
 
 const HeroSection = () => {
     return (
         <section id='home' className='flex min-h-[calc(100dvh-30rem)] flex-1 flex-col justify-between gap-12 overflow-x-hidden pt-8 sm:gap-16 sm:pt-16 lg:gap-24 lg:pt-24'>
             {/* Hero Content */}
             <div className='mx-auto flex max-w-7xl flex-col items-center gap-8 px-4 text-center sm:px-6 lg:px-8'>
-                <div className='bg-muted flex items-center gap-2.5 rounded-full border px-3 py-2'>
-                    <Badge>AI-Powered</Badge>
-                    <span className='text-muted-foreground'>Search for your favorite food or meal</span>
-                </div>
+
 
                 <h1 className='text-3xl leading-[1.29167] font-bold text-balance sm:text-4xl lg:text-5xl'>
                     Sizzling Summer Delights
@@ -48,15 +44,17 @@ const HeroSection = () => {
                     Recipes for Parties!
                 </h1>
 
+
                 <p className='text-muted-foreground'>
                     Dive into a world of flavor this summer with our collection of Sizzling Summer Delights!
                     <br />
                     From refreshing appetizers to delightful desserts
                 </p>
 
-                <Button size='lg' asChild>
-                    <a href='#'>Try It Now</a>
-                </Button>
+                <div className='w-full max-w-2xl'>
+                    <SearchAsync />
+                </div>
+
             </div>
 
             {/* Image */}

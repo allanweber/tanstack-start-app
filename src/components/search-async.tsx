@@ -22,12 +22,6 @@ import { Search, SearchResult } from './search'
 
 // Simulated API call - replace with your actual API endpoint
 async function searchAPI(query: string): Promise<SearchResult[]> {
-    // Simulate network delay
-    // await new Promise(resolve => setTimeout(resolve, 500))
-
-    // This is mock data. In production, replace with:
-    // const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
-    // return response.json()
 
     const allResults: SearchResult[] = [
         {
@@ -225,11 +219,11 @@ export function SearchAsync() {
     return (
         <Search
             results={results}
-            placeholder="Search documentation, pages, and more..."
+            placeholder="Search for your favorite food or meal"
+            badgeText="Search Foods"
             onSearch={handleSearch}
             onSelect={handleSelect}
             groupByCategory={true}
-            className="rounded-lg border shadow-md"
             emptyContent={emptyContent}
         />
     )
