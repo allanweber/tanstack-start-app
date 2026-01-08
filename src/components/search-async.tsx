@@ -1,3 +1,5 @@
+import foodsData from '@/data/foods.json'
+import type { Food } from '@/types/food'
 import { useNavigate } from '@tanstack/react-router'
 import {
     Loader2Icon,
@@ -17,113 +19,14 @@ import { Search, SearchResult } from './search'
 // Simulated API call - replace with your actual API endpoint
 async function searchAPI(query: string): Promise<SearchResult[]> {
 
-    const allResults: SearchResult[] = [
-        {
-            id: '1',
-            title: 'Margherita Pizza',
-            description: 'Classic Italian pizza with fresh mozzarella, tomatoes, and basil',
-            slug: 'margherita-pizza',
-            image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=100&h=100&fit=crop',
-        },
-        {
-            id: '2',
-            title: 'Cheeseburger',
-            description: 'Juicy beef patty with melted cheese, lettuce, tomato, and special sauce',
-            slug: 'cheeseburger',
-            image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&h=100&fit=crop',
-        },
-        {
-            id: '3',
-            title: 'Caesar Salad',
-            description: 'Fresh romaine lettuce with parmesan, croutons, and Caesar dressing',
-            slug: 'caesar-salad',
-            image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=100&h=100&fit=crop',
-        },
-        {
-            id: '4',
-            title: 'Sushi Platter',
-            description: 'Assorted fresh sushi rolls with salmon, tuna, and avocado',
-            slug: 'sushi-platter',
-            image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=100&h=100&fit=crop',
-        },
-        {
-            id: '5',
-            title: 'Tacos',
-            description: 'Soft corn tortillas filled with seasoned meat, salsa, and cilantro',
-            slug: 'tacos',
-            image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=100&h=100&fit=crop',
-        },
-        {
-            id: '6',
-            title: 'Pad Thai',
-            description: 'Stir-fried rice noodles with shrimp, peanuts, and tangy sauce',
-            slug: 'pad-thai',
-            image: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=100&h=100&fit=crop',
-        },
-        {
-            id: '7',
-            title: 'Pasta Carbonara',
-            description: 'Creamy Italian pasta with bacon, eggs, and parmesan cheese',
-            slug: 'pasta-carbonara',
-            image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=100&h=100&fit=crop',
-        },
-        {
-            id: '8',
-            title: 'Chicken Tikka Masala',
-            description: 'Tender chicken in a rich, creamy tomato-based curry sauce',
-            slug: 'chicken-tikka-masala',
-            image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=100&h=100&fit=crop',
-        },
-        {
-            id: '9',
-            title: 'Ramen Bowl',
-            description: 'Japanese noodle soup with pork, soft-boiled egg, and vegetables',
-            slug: 'ramen-bowl',
-            image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=100&h=100&fit=crop',
-        },
-        {
-            id: '10',
-            title: 'Greek Gyros',
-            description: 'Grilled meat wrapped in pita with tzatziki, tomatoes, and onions',
-            slug: 'greek-gyros',
-            image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=100&h=100&fit=crop',
-        },
-        {
-            id: '11',
-            title: 'BBQ Ribs',
-            description: 'Slow-cooked pork ribs with smoky barbecue sauce',
-            slug: 'bbq-ribs',
-            image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=100&h=100&fit=crop',
-        },
-        {
-            id: '12',
-            title: 'Fried Rice',
-            description: 'Wok-fried rice with vegetables, eggs, and soy sauce',
-            slug: 'fried-rice',
-            image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=100&h=100&fit=crop',
-        },
-        {
-            id: '13',
-            title: 'Fish and Chips',
-            description: 'Crispy battered fish with golden french fries',
-            slug: 'fish-and-chips',
-            image: 'https://images.unsplash.com/photo-1579208570378-8c970854bc23?w=100&h=100&fit=crop',
-        },
-        {
-            id: '14',
-            title: 'Falafel Wrap',
-            description: 'Crispy chickpea fritters with hummus, vegetables, and tahini',
-            slug: 'falafel-wrap',
-            image: 'https://images.unsplash.com/photo-1593858421991-5c5c4f55aa3a?w=100&h=100&fit=crop',
-        },
-        {
-            id: '15',
-            title: 'Chocolate Cake',
-            description: 'Rich, moist chocolate cake with creamy chocolate frosting',
-            slug: 'chocolate-cake',
-            image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=100&h=100&fit=crop',
-        },
-    ]
+    // Convert Food data to SearchResult format
+    const allResults: SearchResult[] = (foodsData as Food[]).map(food => ({
+        id: food.id?.toString() || food.slug || '',
+        title: food.name,
+        description: food.description,
+        slug: food.slug,
+        image: food.image_url ? food.image_url.replace('w=800&h=600', 'w=100&h=100') : undefined,
+    }))
 
     // Filter results based on query
     const lowerQuery = query.toLowerCase()
