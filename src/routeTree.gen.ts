@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout.index'
-import { Route as DemoQueryRouteImport } from './routes/demo/query'
 import { Route as LayoutFoodsFoodRouteImport } from './routes/_layout.foods.$food'
 
 const LayoutRoute = LayoutRouteImport.update({
@@ -23,11 +22,6 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutRoute,
 } as any)
-const DemoQueryRoute = DemoQueryRouteImport.update({
-  id: '/demo/query',
-  path: '/demo/query',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LayoutFoodsFoodRoute = LayoutFoodsFoodRouteImport.update({
   id: '/foods/$food',
   path: '/foods/$food',
@@ -35,38 +29,29 @@ const LayoutFoodsFoodRoute = LayoutFoodsFoodRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/demo/query': typeof DemoQueryRoute
   '/': typeof LayoutIndexRoute
   '/foods/$food': typeof LayoutFoodsFoodRoute
 }
 export interface FileRoutesByTo {
-  '/demo/query': typeof DemoQueryRoute
   '/': typeof LayoutIndexRoute
   '/foods/$food': typeof LayoutFoodsFoodRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_layout': typeof LayoutRouteWithChildren
-  '/demo/query': typeof DemoQueryRoute
   '/_layout/': typeof LayoutIndexRoute
   '/_layout/foods/$food': typeof LayoutFoodsFoodRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/demo/query' | '/' | '/foods/$food'
+  fullPaths: '/' | '/foods/$food'
   fileRoutesByTo: FileRoutesByTo
-  to: '/demo/query' | '/' | '/foods/$food'
-  id:
-    | '__root__'
-    | '/_layout'
-    | '/demo/query'
-    | '/_layout/'
-    | '/_layout/foods/$food'
+  to: '/' | '/foods/$food'
+  id: '__root__' | '/_layout' | '/_layout/' | '/_layout/foods/$food'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
-  DemoQueryRoute: typeof DemoQueryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -84,13 +69,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof LayoutIndexRouteImport
       parentRoute: typeof LayoutRoute
-    }
-    '/demo/query': {
-      id: '/demo/query'
-      path: '/demo/query'
-      fullPath: '/demo/query'
-      preLoaderRoute: typeof DemoQueryRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/_layout/foods/$food': {
       id: '/_layout/foods/$food'
@@ -117,7 +95,6 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
-  DemoQueryRoute: DemoQueryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

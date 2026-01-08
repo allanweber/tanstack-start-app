@@ -1,5 +1,4 @@
-import foodsData from '@/data/foods.json'
-import type { Food } from '@/types/food'
+import { searchFoods } from '@/api/foods'
 import { useNavigate } from '@tanstack/react-router'
 import {
     Loader2Icon,
@@ -11,30 +10,23 @@ import { Search, SearchResult } from './search'
 /**
  * Advanced example: Async search with debouncing
  * This component demonstrates how to:
- * - Fetch search results from an API
+ * - Fetch search results from a server function
  * - Debounce search queries
  * - Handle loading and error states
  */
 
-// Simulated API call - replace with your actual API endpoint
+// Search using server function
 async function searchAPI(query: string): Promise<SearchResult[]> {
-
+    const foods = await searchFoods({ data: { query } })
+    
     // Convert Food data to SearchResult format
-    const allResults: SearchResult[] = (foodsData as Food[]).map(food => ({
+    return foods.map(food => ({
         id: food.id?.toString() || food.slug || '',
         title: food.name,
         description: food.description,
         slug: food.slug,
         image: food.image_url ? food.image_url.replace('w=800&h=600', 'w=100&h=100') : undefined,
     }))
-
-    // Filter results based on query
-    const lowerQuery = query.toLowerCase()
-    return allResults.filter(
-        result =>
-            result.title.toLowerCase().includes(lowerQuery) ||
-            result.description?.toLowerCase().includes(lowerQuery)
-    )
 }
 
 // Custom debounce hook

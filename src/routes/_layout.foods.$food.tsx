@@ -1,25 +1,20 @@
+import { getFoodBySlug } from '@/api/foods'
 import { SearchAsync } from '@/components/search-async'
 import { Slider } from '@/components/ui/slider'
-import foodsData from '@/data/foods.json'
-import type { Food } from '@/types/food'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import * as React from 'react'
 
 export const Route = createFileRoute('/_layout/foods/$food')({
+  loader: async ({ params }) => {
+    const food = await getFoodBySlug({ data: { slug: params.food } })
+    return { food }
+  },
   component: FoodDetail,
 })
 
-// Create a lookup map from the imported data
-const foodDataMap: Record<string, Food> = (foodsData as Food[]).reduce((acc, food) => {
-  if (food.slug) {
-    acc[food.slug] = food
-  }
-  return acc
-}, {} as Record<string, Food>)
-
 function FoodDetail() {
   const { food: foodSlug } = Route.useParams()
-  const food = foodDataMap[foodSlug]
+  const { food } = Route.useLoaderData()
   const [servingSize, setServingSize] = React.useState(100)
 
   if (!food) {
