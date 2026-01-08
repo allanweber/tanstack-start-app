@@ -2,11 +2,10 @@ import { SearchAsync } from '@/components/search-async'
 import { Slider } from '@/components/ui/slider'
 import foodsData from '@/data/foods.json'
 import type { Food } from '@/types/food'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { ArrowLeftIcon, FireExtinguisherIcon, UsersIcon } from 'lucide-react'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import * as React from 'react'
 
-export const Route = createFileRoute('/foods/$food')({
+export const Route = createFileRoute('/_layout/foods/$food')({
   component: FoodDetail,
 })
 
@@ -20,7 +19,6 @@ const foodDataMap: Record<string, Food> = (foodsData as Food[]).reduce((acc, foo
 
 function FoodDetail() {
   const { food: foodSlug } = Route.useParams()
-  const navigate = useNavigate()
   const food = foodDataMap[foodSlug]
   const [servingSize, setServingSize] = React.useState(100)
 
@@ -32,13 +30,12 @@ function FoodDetail() {
           <p className="text-muted-foreground mb-6">
             Sorry, we couldn't find the food you're looking for.
           </p>
-          <button
-            onClick={() => navigate({ to: '/' })}
+          <Link
+            to="/"
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
           >
-            <ArrowLeftIcon className="h-4 w-4" />
             Go Back Home
-          </button>
+          </Link>
         </div>
       </div>
     )
@@ -52,22 +49,9 @@ function FoodDetail() {
   const fiberPerServing = ((food.fiberPer100g * servingSize) / 100).toFixed(1) + 'g'
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <button
-            onClick={() => navigate({ to: '/' })}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            Back to Home
-          </button>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-background pt-20">
       {/* Search Section */}
-      <section className="border-b bg-muted/30">
+      <section>
         <div className="container mx-auto px-4 py-6">
           <SearchAsync key={foodSlug} />
         </div>
@@ -78,38 +62,21 @@ function FoodDetail() {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Image Section */}
           <div className="space-y-4">
+            <h1 className="text-4xl font-bold mb-2 text-center md:text-left">{food.name}</h1>
             <img
               src={food.image_url}
               alt={food.name}
               className="w-full rounded-lg shadow-lg object-cover aspect-4/3"
             />
-
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col items-center p-4 bg-muted rounded-lg">
-                <FireExtinguisherIcon className="h-5 w-5 mb-2 text-primary" />
-                <span className="text-sm font-medium">{caloriesPerServing} cal</span>
-                <span className="text-xs text-muted-foreground">Per {servingSize}g</span>
-              </div>
-              <div className="flex flex-col items-center p-4 bg-muted rounded-lg">
-                <UsersIcon className="h-5 w-5 mb-2 text-primary" />
-                <span className="text-sm font-medium">{servingSize}g</span>
-                <span className="text-xs text-muted-foreground">Current Serving</span>
-              </div>
-            </div>
+            <p className="text-lg text-muted-foreground text-center md:text-left">
+              {food.description}
+            </p>
           </div>
 
           {/* Details Section */}
           <div className="space-y-6">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">{food.name}</h1>
-              <p className="text-lg text-muted-foreground mb-4">
-                {food.description}
-              </p>
-            </div>
-
             {/* Nutrition Facts */}
-            <div className="border-4 border-black bg-white p-2 font-sans max-w-sm">
+            <div className="border-4 border-black bg-white p-2 font-sans max-w-sm mx-auto md:mx-0">
               {/* Header */}
               <div className="border-b-8 border-black pb-1 mb-1">
                 <h2 className="text-4xl font-black leading-none">Nutrition Facts</h2>

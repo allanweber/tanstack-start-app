@@ -9,88 +9,81 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as FoodsSlugRouteImport } from './routes/foods/$slug'
-import { Route as FoodsFoodRouteImport } from './routes/foods/$food'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as LayoutIndexRouteImport } from './routes/_layout.index'
 import { Route as DemoQueryRouteImport } from './routes/demo/query'
+import { Route as LayoutFoodsFoodRouteImport } from './routes/_layout.foods.$food'
 
-const IndexRoute = IndexRouteImport.update({
+const LayoutRoute = LayoutRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FoodsSlugRoute = FoodsSlugRouteImport.update({
-  id: '/foods/$slug',
-  path: '/foods/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FoodsFoodRoute = FoodsFoodRouteImport.update({
-  id: '/foods/$food',
-  path: '/foods/$food',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => LayoutRoute,
 } as any)
 const DemoQueryRoute = DemoQueryRouteImport.update({
   id: '/demo/query',
   path: '/demo/query',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LayoutFoodsFoodRoute = LayoutFoodsFoodRouteImport.update({
+  id: '/foods/$food',
+  path: '/foods/$food',
+  getParentRoute: () => LayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/demo/query': typeof DemoQueryRoute
-  '/foods/$food': typeof FoodsFoodRoute
-  '/foods/$slug': typeof FoodsSlugRoute
+  '/': typeof LayoutIndexRoute
+  '/foods/$food': typeof LayoutFoodsFoodRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/demo/query': typeof DemoQueryRoute
-  '/foods/$food': typeof FoodsFoodRoute
-  '/foods/$slug': typeof FoodsSlugRoute
+  '/': typeof LayoutIndexRoute
+  '/foods/$food': typeof LayoutFoodsFoodRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_layout': typeof LayoutRouteWithChildren
   '/demo/query': typeof DemoQueryRoute
-  '/foods/$food': typeof FoodsFoodRoute
-  '/foods/$slug': typeof FoodsSlugRoute
+  '/_layout/': typeof LayoutIndexRoute
+  '/_layout/foods/$food': typeof LayoutFoodsFoodRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/query' | '/foods/$food' | '/foods/$slug'
+  fullPaths: '/demo/query' | '/' | '/foods/$food'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/query' | '/foods/$food' | '/foods/$slug'
-  id: '__root__' | '/' | '/demo/query' | '/foods/$food' | '/foods/$slug'
+  to: '/demo/query' | '/' | '/foods/$food'
+  id:
+    | '__root__'
+    | '/_layout'
+    | '/demo/query'
+    | '/_layout/'
+    | '/_layout/foods/$food'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
   DemoQueryRoute: typeof DemoQueryRoute
-  FoodsFoodRoute: typeof FoodsFoodRoute
-  FoodsSlugRoute: typeof FoodsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_layout/': {
+      id: '/_layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/foods/$slug': {
-      id: '/foods/$slug'
-      path: '/foods/$slug'
-      fullPath: '/foods/$slug'
-      preLoaderRoute: typeof FoodsSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/foods/$food': {
-      id: '/foods/$food'
-      path: '/foods/$food'
-      fullPath: '/foods/$food'
-      preLoaderRoute: typeof FoodsFoodRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof LayoutIndexRouteImport
+      parentRoute: typeof LayoutRoute
     }
     '/demo/query': {
       id: '/demo/query'
@@ -99,14 +92,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_layout/foods/$food': {
+      id: '/_layout/foods/$food'
+      path: '/foods/$food'
+      fullPath: '/foods/$food'
+      preLoaderRoute: typeof LayoutFoodsFoodRouteImport
+      parentRoute: typeof LayoutRoute
+    }
   }
 }
 
+interface LayoutRouteChildren {
+  LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutFoodsFoodRoute: typeof LayoutFoodsFoodRoute
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutIndexRoute: LayoutIndexRoute,
+  LayoutFoodsFoodRoute: LayoutFoodsFoodRoute,
+}
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  LayoutRoute: LayoutRouteWithChildren,
   DemoQueryRoute: DemoQueryRoute,
-  FoodsFoodRoute: FoodsFoodRoute,
-  FoodsSlugRoute: FoodsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

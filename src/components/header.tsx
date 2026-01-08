@@ -6,10 +6,10 @@ import React from 'react'
 import Logo from './logo'
 
 const menuItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'About', href: '#about' },
+    { name: 'Home', href: '/#home' },
+    { name: 'Features', href: '/#features' },
+    { name: 'Pricing', href: '/#pricing' },
+    { name: 'About', href: '/#about' },
 ]
 
 export default function Header() {
