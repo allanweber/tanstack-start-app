@@ -15,7 +15,14 @@ export const Route = createFileRoute('/_layout/foods/$food')({
 function FoodDetail() {
   const { food: foodSlug } = Route.useParams()
   const { food } = Route.useLoaderData()
-  const [servingSize, setServingSize] = React.useState(100)
+  const [servingSize, setServingSize] = React.useState(food?.servingSizeG || 100)
+
+  // Update serving size when navigating to a new food
+  React.useEffect(() => {
+    if (food?.servingSizeG) {
+      setServingSize(food.servingSizeG)
+    }
+  }, [food?.servingSizeG])
 
   if (!food) {
     return (
